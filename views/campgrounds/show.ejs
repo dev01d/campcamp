@@ -16,6 +16,9 @@
           <h4 class="pull-right">$9.00/day</h4>
           <h4><a><%= campground.name %></a></h4>
           <p><%= campground.description %></p>
+          <p>
+            <em>Submitted By </em><strong><%= campground.author.username.toUpperCase() %></strong> 
+          </p>
         </div>
       </div>
       <div class="well">
@@ -26,7 +29,7 @@
         <% campground.comments.forEach(function(comment){ %>
           <div class="row">
             <div class="col-md-12">
-              <strong><%= comment.author %></strong>
+              <strong><%= comment.author.username.toUpperCase() %></strong>
               <span class="pull-right"> 10 days ago</span>
               <p>
                 <%= comment.text %>

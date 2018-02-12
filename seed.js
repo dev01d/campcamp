@@ -43,32 +43,32 @@ function seedDB() {
       }
       console.log("removed comments!");
       //add a few campgrounds
-      data.forEach(function (seed) {
-        Campground.create(seed, function (err, campground) {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log("added a campground");
-            //create a comment
-            Comment.create(
-              {
-                text:
-                  "PBR&B slow-carb bicycle rights wolf coloring book sustainable farm whatever pour-over drinking vinegar. Fixie sartorial subway tile master cleanse poutine. Master cleanse crucifix VHS raw denim, bitters you probably haven't heard of them",
-                author: "Windmill"
-              },
-              function(err, comment) {
-                if (err) {
-                  console.log(err);
-                } else {
-                  campground.comments.push(comment._id);
-                  campground.save();
-                  console.log("Created new comment");
-                }
-              }
-            );
-          }
-        });
-      });
+      // data.forEach(function (seed) {
+      //   Campground.create(seed, function (err, campground) {
+      //     if (err) {
+      //       console.log(err);
+      //     } else {
+      //       console.log("added a campground");
+      //       //create a comment
+      //       Comment.create(
+      //         {
+      //           text:
+      //             "PBR&B slow-carb bicycle rights wolf coloring book sustainable farm whatever pour-over drinking vinegar. Fixie sartorial subway tile master cleanse poutine. Master cleanse crucifix VHS raw denim, bitters you probably haven't heard of them",
+      //           author: "Windmill"
+      //         },
+      //         function(err, comment) {
+      //           if (err) {
+      //             console.log(err);
+      //           } else {
+      //             campground.comments.push(comment._id);
+      //             campground.save();
+      //             console.log("Created new comment");
+      //           }
+      //         }
+      //       );
+      //     }
+      //   });
+      // });
     });
   });
   //add a few comments
