@@ -7,6 +7,7 @@ var express = require("express"),
   Comment = require("./models/comment"),
   User = require("./models/user"),
   seedDB = require("./seed"),
+  methodOverride = require("method-override"),
   app = express();
 
 //  Require routes
@@ -18,6 +19,7 @@ mongoose.connect("mongodb://localhost/campcamp");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
+app.use(methodOverride("_method"));
 // temp destroy and populate db
 seedDB();
 

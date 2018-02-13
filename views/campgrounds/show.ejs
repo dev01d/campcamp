@@ -1,4 +1,5 @@
 <% include ../partials/header %>
+
 <div class="container">
   <div class="row">
     <div class="col-md-3">
@@ -19,6 +20,12 @@
           <p>
             <em>Submitted By </em><strong><%= campground.author.username.toUpperCase() %></strong> 
           </p>
+          <% if (currentUser && campground.author.id.equals(currentUser._id)){ %>
+            <a class="btn btn-xs btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+            <form class="delete" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
+              <button class="btn btn-xs btn-danger">Delete</button>
+            </form>
+          <% } %>
         </div>
       </div>
       <div class="well">
@@ -34,6 +41,14 @@
               <p>
                 <%= comment.text %>
               </p>
+              <% if (currentUser && comment.author.id.equals(currentUser._id)){ %>
+                <a class="btn btn-xs btn-warning" 
+                  href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">
+                  Edit</a>
+                <form class="delete" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                  <input class="btn btn-xs btn-danger" type="submit" name="delete" value="Delete">
+                </form>
+              <% } %>
             </div>
           </div>
         <% }); %>
