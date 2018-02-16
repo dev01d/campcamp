@@ -7,7 +7,8 @@ var middleware = {};
 middleware.checkCampgroundOwner = (req, res, next) => {
   if (req.isAuthenticated) {
     Campground.findById(req.params.id, (err, foundCampground) => {
-      if (err) {
+      if (err || !foundCampground) {
+        req.flash("error", "Campground not found");
         res.redirect("back");
       } else {
         if (foundCampground.author.id.equals(req.user._id)) {
@@ -18,6 +19,7 @@ middleware.checkCampgroundOwner = (req, res, next) => {
       }
     });
   } else {
+    req.flash("error", "Please Login First");
     res.redirect("back");
   }
 };
@@ -26,7 +28,8 @@ middleware.checkCampgroundOwner = (req, res, next) => {
 middleware.checkCommentOwner = (req, res, next) => {
   if (req.isAuthenticated) {
     Comment.findById(req.params.comment_id, (err, foundComment) => {
-      if (err) {
+      if (err || !foundComment) {
+        req.flash("error", "Comment not found.");
         res.redirect("back");
       } else {
         if (foundComment.author.id.equals(req.user._id)) {
@@ -37,6 +40,7 @@ middleware.checkCommentOwner = (req, res, next) => {
       }
     });
   } else {
+    req.flash("error", "Please Login First");
     res.redirect("back");
   }
 };

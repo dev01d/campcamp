@@ -24,6 +24,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
     } else {
       Comment.create(req.body.comment, (err, comment) => {
         if (err) {
+          req.flash("error", "Oops! Something went wrong.");
           console.log(err);
         } else {
           // Add UN and ID to comment
@@ -32,6 +33,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
           comment.save();
           campground.comments.push(comment._id);
           campground.save();
+          req.flash("success", "Created comment!");
           res.redirect("/campgrounds/" + campground._id);
         }
       });
@@ -41,15 +43,21 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
 
 // EDIT comment
 router.get("/:comment_id/edit", middleware.checkCommentOwner, (req, res) => {
-  Comment.findById(req.params.comment_id, (err, foundComment) => {
-    if (err) {
-      res.redirect("back");
-    } else {
-      res.render("comments/edit", {
-        campground_id: req.params.id,
-        comment: foundComment
-      });
+  Campground.findById(req.params.id, (err, foundCampground) => {
+    if (err || !foundCampground) {
+      req.flash("error", "Campground not found");
+      return res.redirect("back");
     }
+    Comment.findById(req.params.comment_id, (err, foundComment) => {
+      if (err) {
+        res.redirect("back");
+      } else {
+        res.render("comments/edit", {
+          campground_id: req.params.id,
+          comment: foundComment
+        });
+      }
+    });
   });
 });
 
@@ -62,6 +70,7 @@ router.put("/:comment_id", middleware.checkCommentOwner, (req, res) => {
       if (err) {
         res.redirect("back");
       } else {
+        req.flash("success", "Comment updated!");
         res.redirect("/campgrounds/" + req.params.id);
       }
     }
@@ -74,6 +83,7 @@ router.delete("/:comment_id", middleware.checkCommentOwner, (req, res) => {
     if (err) {
       res.redirect("back");
     } else {
+      req.flash("success", "Removed comment!");
       res.redirect("/campgrounds/" + req.params.id);
     }
   });

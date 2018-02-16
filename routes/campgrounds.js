@@ -8,6 +8,7 @@ router.get("/", (req, res) => {
   //  get all CGs
   Campground.find({}, (err, allCampgrounds) => {
     if (err) {
+      req.flash("error", "Oops! Something went wrong.");
       console.log(err);
     } else {
       res.render("campgrounds/index", { campgrounds: allCampgrounds });
@@ -35,7 +36,9 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
   Campground.create(newCampground, (err, newlyCreated) => {
     if (err) {
       console.log(err);
+      req.flash("error", "Campground not found");
     } else {
+      req.flash("success", "New campground created!");
       res.redirect("/campgrounds");
     }
   });
@@ -51,11 +54,11 @@ router.get("/:id", (req, res) => {
   Campground.findById(req.params.id)
     .populate("comments")
     .exec(function(err, foundCampground) {
-      if (err) {
+      if (err || !foundCampground) {
+        req.flash("error", "Campground not found");
         console.log(err);
+        res.redirect("back");
       } else {
-        console.log(foundCampground);
-        // find the CG with provided ID
         // render SHOW with that ID
         res.render("campgrounds/show", { campground: foundCampground });
       }
@@ -76,8 +79,10 @@ router.put("/:id", middleware.checkCampgroundOwner, (req, res) => {
     req.body.campground,
     (err, updatedCampground) => {
       if (err) {
+        req.flash("error", "Campground not found");
         res.redirect("/campgrounds");
       } else {
+        req.flash("success", "Campground updated!");
         res.redirect("/campgrounds/" + req.params.id);
       }
     }
@@ -90,6 +95,7 @@ router.delete("/:id", middleware.checkCampgroundOwner, (req, res) => {
     if (err) {
       res.redirect("/campgrounds");
     } else {
+      req.flash("success", "Campground deleted!");
       res.redirect("/campgrounds");
     }
   });
