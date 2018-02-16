@@ -41,12 +41,12 @@ middleware.checkCommentOwner = (req, res, next) => {
   }
 };
 
-
 // Check logged in middleware
 middleware.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
+  req.flash("error", "Please Login First");
   res.redirect("/login");
 };
 

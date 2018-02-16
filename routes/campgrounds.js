@@ -31,7 +31,6 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
     description: desc,
     author: author
   };
-
   // create new CG and save to DB
   Campground.create(newCampground, (err, newlyCreated) => {
     if (err) {

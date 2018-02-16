@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router({ mergeParams: true });
-var Comment = require("../models/comment");
 var Campground = require("../models/campground");
+var Comment = require("../models/comment");
 var middleware = require("../middleware");
 
 // New comment
@@ -40,7 +40,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
 });
 
 // EDIT comment
-router.get("/:comment_id/edit", middleware.checkCommentOwner, (req, resp) => {
+router.get("/:comment_id/edit", middleware.checkCommentOwner, (req, res) => {
   Comment.findById(req.params.comment_id, (err, foundComment) => {
     if (err) {
       res.redirect("back");
@@ -56,7 +56,7 @@ router.get("/:comment_id/edit", middleware.checkCommentOwner, (req, resp) => {
 // UPDATE comment
 router.put("/:comment_id", middleware.checkCommentOwner, (req, res) => {
   Comment.findOneAndUpdate(
-    req.params.comment._id,
+    req.params.comment_id,
     req.body.comment,
     (err, foundComment) => {
       if (err) {
